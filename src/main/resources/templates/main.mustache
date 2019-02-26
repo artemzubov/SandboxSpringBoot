@@ -6,12 +6,21 @@
         <form method="post">
             <input type="text" name="text" placeholder="Insert text">
             <input type="text" name="tag" placeholder="Insert tag">
+            <input type="hidden" name="_csrf" value="{{_csrf.token}}">
             <button type="submit">Send</button>
+        </form>
+    </div>
+
+    <div>
+        <form action="/logout" method="post">
+            <input type="submit" value="Sign Out"/>
+            <input type="hidden" name="_csrf" value="{{_csrf.token}}">
         </form>
     </div>
 
     <form method="post" action="filter">
         <input type="text" name="filter">
+        <input type="hidden" name="_csrf" value="{{_csrf.token}}">
         <button type="submit">Filter</button>
     </form>
 
