@@ -3,14 +3,13 @@ package ru.spb.zubov.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.spb.zubov.domain.Message;
 import ru.spb.zubov.domain.User;
 import ru.spb.zubov.repos.MessageRepo;
-
-import java.util.Map;
 
 @Controller
 public class MainController {
@@ -24,11 +23,21 @@ public class MainController {
     }
 
     @GetMapping("/main")
-    public String main(Map<String, Object> model){
+    public String main(@RequestParam(required = false, defaultValue = "") String filter,
+                       Model model){
 
-        Iterable<Message> messages = messageRepo.findAll();
+        Iterable<Message> messages;
 
-        model.put("messages", messages);
+        if (filter == null || filter.isEmpty()){
+            messages = messageRepo.findAll();
+        }
+        else {
+            messages = messageRepo.findByTag(filter);
+        }
+
+        model.addAttribute("messages", messages);
+        model.addAttribute("filter", filter);
+
         return "main";
     }
 
@@ -36,30 +45,14 @@ public class MainController {
     public String add(@AuthenticationPrincipal User user,
                       @RequestParam String text,
                       @RequestParam String tag,
-                      Map<String, Object> model){
+                      Model model){
 
         Message message = new Message(text, tag, user);
         messageRepo.save(message);
 
         Iterable<Message> messages = messageRepo.findAll();
-        model.put("messages", messages);
-
-        return "main";
-    }
-
-    @PostMapping("/filter")
-    public String add(@RequestParam String filter,
-                      Map<String, Object> model){
-
-        Iterable<Message> byTag;
-        if (filter == null || filter.isEmpty()){
-            byTag = messageRepo.findAll();
-        }
-        else {
-            byTag = messageRepo.findByTag(filter);
-        }
-
-        model.put("messages", byTag);
+        model.addAttribute("messages", messages);
+        model.addAttribute("filter", "");
 
         return "main";
     }
