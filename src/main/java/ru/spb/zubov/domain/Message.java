@@ -4,10 +4,10 @@ import javax.persistence.*;
 
 @Entity
 public class Message {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    private Long id;
+
     private String text;
     private String tag;
 
@@ -27,31 +27,7 @@ public class Message {
     }
 
     public String getAuthorName() {
-        return author != null ? author.getUsername() : "null";
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public String getTag() {
-        return tag;
-    }
-
-    public void setTag(String tag) {
-        this.tag = tag;
+        return author != null ? author.getUsername() : "<none>";
     }
 
     public User getAuthor() {
@@ -60,6 +36,30 @@ public class Message {
 
     public void setAuthor(User author) {
         this.author = author;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 
     public String getFilename() {
