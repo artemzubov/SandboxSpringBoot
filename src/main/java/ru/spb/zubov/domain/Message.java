@@ -1,6 +1,9 @@
 package ru.spb.zubov.domain;
 
+import org.hibernate.validator.constraints.Length;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 public class Message {
@@ -8,6 +11,8 @@ public class Message {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
 
+    @NotBlank(message = "Must be not blank")
+    @Length(max = 2048, message = "Exceeds max length")
     private String text;
     private String tag;
 
